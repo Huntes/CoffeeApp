@@ -7,3 +7,5 @@
 /CoffeeApp/CoffeeApp/obj
 /CoffeeApp/CoffeeApp.Android/obj
 /CoffeeApp/CoffeeApp.iOS/obj
+/CoffeeApp/CoffeeApp/bin/Debug/netstandard2.0
+/CoffeeApp/CoffeeApp.Android/bin/Debug
