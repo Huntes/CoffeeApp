@@ -15,6 +15,22 @@ namespace CoffeeApp.Views
         public CoffeeEquipmentPage()
         {
             InitializeComponent();
+            LabelCount.Text = "Olá, de código backend";
+        }
+
+        private int count = 0;
+        public int Count { get => count; set { count = value; } }
+
+        private void ButtonClick_Clicked(object sender, EventArgs e)
+        {
+            Count++;
+            LabelCount.Text = $"Você clicou {Count} vez(es)";
+        }
+
+        private void ButtonClickLess_Clicked(object sender, EventArgs e)
+        {
+            Count--;
+            LabelCount.Text = $"Você clicou {Count} vez(es)";
         }
     }
 }

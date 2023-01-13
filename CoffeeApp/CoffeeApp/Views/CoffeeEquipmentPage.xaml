@@ -1,13 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             BackgroundColor="orange"
+             BackgroundColor="white"
              x:Class="CoffeeApp.Views.CoffeeEquipmentPage">
+    
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <!-- Define 2 rows, a primeira com o máximo de espaço possível, e a segunda com base zero (automatico)  -->
+        <Grid RowDefinitions="*,Auto, Auto, *">
+            <Label 
+                x:Name="LabelCount"
+                Grid.Row="1"
+                TextColor="Gray"
+                Text="Bem vindo a aplicação!"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"/>
+
+            <StackLayout Grid.Row="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                <Button WidthRequest="70" 
+                        HeightRequest="70" 
+                        CornerRadius="100" 
+                        x:Name="ButtonClick" 
+                        HorizontalOptions="Center" 
+                        Clicked="ButtonClick_Clicked"
+                        Grid.Row="2" 
+                        Text="+"
+                        FontSize="Large"
+                        BackgroundColor="DodgerBlue"/>
+
+                <Button
+                    WidthRequest="70" 
+                    HeightRequest="70" 
+                    CornerRadius="100" 
+                    x:Name="ButtonClickLess"
+                    HorizontalOptions="Center" 
+                    Clicked="ButtonClickLess_Clicked" 
+                    Grid.Row="1" 
+                    Text="-"
+                    FontSize="Large"
+                    BackgroundColor="Red"/>
+                
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

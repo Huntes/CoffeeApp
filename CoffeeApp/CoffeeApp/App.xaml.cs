@@ -1,5 +1,4 @@
-﻿using CoffeeApp.Services;
-using CoffeeApp.Views;
+﻿using CoffeeApp.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
