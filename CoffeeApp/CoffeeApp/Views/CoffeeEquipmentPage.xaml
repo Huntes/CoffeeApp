@@ -1,17 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:CoffeeApp.ViewModels"
              BackgroundColor="white"
-             x:Class="CoffeeApp.Views.CoffeeEquipmentPage">
-    
+             x:Class="CoffeeApp.Views.CoffeeEquipmentPage"
+             x:DataType="viewmodels:CoffeeEquipmentViewModel">
+
+    <!-- 
+    x:DataType realiza a compilação de bindings, onde podem ser depurados pelo compilador e apresentados como erro caso haja algum binding errado
+    melhorando a performance dos bindings da VM
+    -->
+
+    <ContentPage.BindingContext>
+        <viewmodels:CoffeeEquipmentViewModel />
+    </ContentPage.BindingContext>
+
     <ContentPage.Content>
         <!-- Define 2 rows, a primeira com o máximo de espaço possível, e a segunda com base zero (automatico)  -->
         <Grid RowDefinitions="*,Auto, Auto, *">
+
             <Label 
-                x:Name="LabelCount"
                 Grid.Row="1"
                 TextColor="Gray"
-                Text="Bem vindo a aplicação!"
+                Text="{Binding CountDisplay}"
                 FontSize="Large"
                 HorizontalOptions="CenterAndExpand"/>
 
@@ -21,7 +32,7 @@
                         CornerRadius="100" 
                         x:Name="ButtonClick" 
                         HorizontalOptions="Center" 
-                        Clicked="ButtonClick_Clicked"
+                        Command="{Binding IncreaseCount}"
                         Grid.Row="2" 
                         Text="+"
                         FontSize="Large"
@@ -33,12 +44,12 @@
                     CornerRadius="100" 
                     x:Name="ButtonClickLess"
                     HorizontalOptions="Center" 
-                    Clicked="ButtonClickLess_Clicked" 
+                    Command="{Binding DecreaseCount}" 
                     Grid.Row="1" 
                     Text="-"
                     FontSize="Large"
                     BackgroundColor="Red"/>
-                
+
             </StackLayout>
         </Grid>
     </ContentPage.Content>
