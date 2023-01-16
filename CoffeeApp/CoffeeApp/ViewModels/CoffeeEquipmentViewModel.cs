@@ -1,7 +1,8 @@
-﻿using MvvmHelpers;
+﻿using CoffeeApp.Models;
+using MvvmHelpers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,45 +12,37 @@ namespace CoffeeApp.ViewModels
 {
     public class CoffeeEquipmentViewModel : ViewModelBase
     {
+        public ObservableRangeCollection<Coffee> Coffee { get; }
+        public ObservableRangeCollection<Grouping<string, Coffee>> CoffeeGroups { get; set; }
+
         public CoffeeEquipmentViewModel()
         {
-            IncreaseCount = new Command(OnIncrease);
-            DecreaseCount = new Command(OnDecrease);
-            CallServerCommand = new Command(async () => { await CallServer(); });
-            Coffee = new ObservableRangeCollection<string>();
-            Title = "Coffee Equipment";
+            Coffee = new ObservableRangeCollection<Coffee>();
+            CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
+
+            var image = "https://www.oswaldocruz.com/site/images/artigos/pesquisa_cafe_coracao.jpg";
+
+            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Sip of Sunshine", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Potent Potable", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+
+            CoffeeGroups.Add(new Grouping<string, Coffee>("Blue Bottle", new[] { Coffee.LastOrDefault() }));
+            CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", Coffee.Take(2)));
+
+            RefreshAsync = new Command(async () => { await Refresh(); });
         }
+        public ICommand RefreshAsync { get; }
 
-        public ObservableRangeCollection<string> Coffee { get; }
-
-        public ICommand CallServerCommand { get; }
-        public ICommand IncreaseCount { get; }
-        public ICommand DecreaseCount { get; set; }
-
-        int count = 0;
-        string countDisplay = "Clique aqui";
-
-        public string CountDisplay
+        async Task Refresh()
         {
-            get => countDisplay;
-            set => SetProperty(ref countDisplay, value);
-        }
-
-        async Task CallServer()
-        {
-            Coffee.Add(string.Empty);
-        }
-
-        void OnIncrease()
-        {
-            count++;
-            CountDisplay = $"Você clicou {count} vez(es)";
-        }
-
-        void OnDecrease()
-        {
-            count--;
-            CountDisplay = $"Você clicou {count} vez(es)";
+            IsBusy = true;
+            await Task.Delay(2000);
+            IsBusy = false;
         }
     }
 }

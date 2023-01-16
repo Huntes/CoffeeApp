@@ -12,11 +12,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\CounterPage.xaml.cs">
+      <DependentUpon>CounterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CoffeeEquipmentPage.xaml.cs">
+      <DependentUpon>CoffeeEquipmentPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\CounterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\CoffeeEquipmentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

@@ -145,4 +145,10 @@
       <Name>CoffeeApp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\icon_plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\icon_coffee.png" />
+  </ItemGroup>
 </Project>

@@ -2,55 +2,98 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:CoffeeApp.ViewModels"
-             BackgroundColor="white"
+             xmlns:model="clr-namespace:CoffeeApp.Models"
              x:Class="CoffeeApp.Views.CoffeeEquipmentPage"
-             x:DataType="viewmodels:CoffeeEquipmentViewModel">
-
-    <!-- 
-    x:DataType realiza a compilação de bindings, onde podem ser depurados pelo compilador e apresentados como erro caso haja algum binding errado
-    melhorando a performance dos bindings da VM
-    -->
-
+             x:DataType="viewmodels:CoffeeEquipmentViewModel"
+             xmlns:local="viewmodels:CoffeeEquipmentViewModel.CoffeeGroups">
+    
     <ContentPage.BindingContext>
-        <viewmodels:CoffeeEquipmentViewModel />
+        <viewmodels:CoffeeEquipmentViewModel/>
     </ContentPage.BindingContext>
-
+    
     <ContentPage.Content>
-        <!-- Define 2 rows, a primeira com o máximo de espaço possível, e a segunda com base zero (automatico)  -->
-        <Grid RowDefinitions="*,Auto, Auto, *">
+        <!--<ListView BackgroundColor="Transparent" ItemsSource="{Binding Coffee}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout BackgroundColor="AliceBlue">
+                            <Label BackgroundColor="Black" Text="{Binding Name}"></Label>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
 
-            <Label 
-                Grid.Row="1"
-                TextColor="Gray"
-                Text="{Binding CountDisplay}"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"/>
+        <ListView ItemSelected="ListView_ItemSelected"
+                  ItemTapped="ListView_ItemTapped"
+                  CachingStrategy="RecycleElement"
+                  ItemsSource="{Binding CoffeeGroups}"
+                  BackgroundColor="Transparent"
+                  HasUnevenRows="true"
+                  SeparatorColor="Transparent"
+                  IsGroupingEnabled="True"
+                  SeparatorVisibility="None"
+                  IsPullToRefreshEnabled="true"
+                  GroupDisplayBinding="{Binding Key}"
+                  IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  RefreshCommand="{Binding RefreshAsync}"
+                  RefreshControlColor="{StaticResource Primary}">
 
-            <StackLayout Grid.Row="2" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                <Button WidthRequest="70" 
-                        HeightRequest="70" 
-                        CornerRadius="100" 
-                        x:Name="ButtonClick" 
-                        HorizontalOptions="Center" 
-                        Command="{Binding IncreaseCount}"
-                        Grid.Row="2" 
-                        Text="+"
-                        FontSize="Large"
-                        BackgroundColor="DodgerBlue"/>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout VerticalOptions="FillAndExpand" Padding="10" BackgroundColor="Transparent">
+                            <Label Text="{Binding .}"
+                                   TextColor="{StaticResource TextColorMedium}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Coffee">
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Favorite" Clicked="MenuItem_Clicked"></MenuItem>
+                            <MenuItem Text="Delete" IsDestructive="True"></MenuItem>
+                        </ViewCell.ContextActions>
+                        <Grid Padding="10">
+                            <Frame CornerRadius="20"
+                                   HasShadow="true">
+                                
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding Image}"
+                                           WidthRequest="100"/>
+                                    
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label FontSize="Large"
+                                               VerticalOptions="Center" 
+                                               TextColor="{StaticResource TextColorStrong}" 
+                                               Text="{Binding Name}"/>
 
-                <Button
-                    WidthRequest="70" 
-                    HeightRequest="70" 
-                    CornerRadius="100" 
-                    x:Name="ButtonClickLess"
-                    HorizontalOptions="Center" 
-                    Command="{Binding DecreaseCount}" 
-                    Grid.Row="1" 
-                    Text="-"
-                    FontSize="Large"
-                    BackgroundColor="Red"/>
-
-            </StackLayout>
-        </Grid>
+                                        <Label FontSize="Large"
+                                               Text="{Binding Roaster}"
+                                               TextColor="{StaticResource TextColorMedium}"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Header>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Coffee of the World"
+                           TextColor="Gray"
+                           BackgroundColor="AliceBlue"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button Text="Load More"/>
+                </StackLayout>
+            </ListView.Footer>
+        </ListView>
     </ContentPage.Content>
 </ContentPage>
