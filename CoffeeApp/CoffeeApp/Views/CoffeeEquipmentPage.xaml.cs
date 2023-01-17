@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoffeeApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,19 +18,29 @@ namespace CoffeeApp.Views
             InitializeComponent();
         }
 
-        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
+        //private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        //{
+        //    //Convertendo o item selecionado na model Coffee
+        //    var coffee = ((ListView)sender).SelectedItem as Coffee;
+        //    if (coffee == null)
+        //        return;
 
-        }
+        //    await DisplayAlert("Café Selecionado", coffee.Name, "OK");
+        //}
 
-        private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
+        //private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        //{
+        //    //Deseleciona o elemento automaticamente
+        //    ((ListView)sender).SelectedItem = null;
+        //}
 
-        }
+        //private async void MenuItem_Clicked(object sender, EventArgs e)
+        //{
+        //    var coffee = ((MenuItem)sender).BindingContext as Coffee;
+        //    if (coffee == null)
+        //        return;
 
-        private void MenuItem_Clicked(object sender, EventArgs e)
-        {
-
-        }
+        //    await DisplayAlert("Café Favorito", coffee.Name, "OK");
+        //}
     }
 }

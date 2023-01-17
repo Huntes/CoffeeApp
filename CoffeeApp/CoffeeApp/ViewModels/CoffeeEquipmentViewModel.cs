@@ -12,7 +12,7 @@ namespace CoffeeApp.ViewModels
 {
     public class CoffeeEquipmentViewModel : ViewModelBase
     {
-        public ObservableRangeCollection<Coffee> Coffee { get; }
+        public ObservableRangeCollection<Coffee> Coffee { get; } = new ObservableRangeCollection<Coffee>();
         public ObservableRangeCollection<Grouping<string, Coffee>> CoffeeGroups { get; set; }
 
         public CoffeeEquipmentViewModel()
@@ -20,29 +20,100 @@ namespace CoffeeApp.ViewModels
             Coffee = new ObservableRangeCollection<Coffee>();
             CoffeeGroups = new ObservableRangeCollection<Grouping<string, Coffee>>();
 
-            var image = "https://www.oswaldocruz.com/site/images/artigos/pesquisa_cafe_coracao.jpg";
+            LoadMore();
 
-            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Sip of Sunshine", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Yes Plz", Name = "Potent Potable", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
-            Coffee.Add(new Coffee { Roaster = "Blue Bottle", Name = "Kenya Kiambu Handege", Image = image });
+            //var tiposCafe = Coffee.GroupBy(c => c.Roaster).Select(g => g.First().Roaster).ToList();
+            //foreach (var tipo in tiposCafe)
+            //{
+            //    CoffeeGroups.Add(new Grouping<string, Coffee>(tipo, Coffee.Where(c => c.Roaster == tipo)));
+            //}
 
-            CoffeeGroups.Add(new Grouping<string, Coffee>("Blue Bottle", new[] { Coffee.LastOrDefault() }));
-            CoffeeGroups.Add(new Grouping<string, Coffee>("Yes Plz", Coffee.Take(2)));
-
-            RefreshAsync = new Command(async () => { await Refresh(); });
+            RefreshCommandAsync = new Command(async () => { await Refresh(); });
+            FavoriteCommandAsync = new Command<Coffee>(async (coffee) => { await Favorite(coffee); });
+            LoadMoreCommandAsync = new Command(LoadMore);
         }
-        public ICommand RefreshAsync { get; }
+
+        public ICommand RefreshCommandAsync { get; }
+        public ICommand FavoriteCommandAsync { get; }
+        public ICommand LoadMoreCommandAsync { get; }
+
+        Coffee previouslySelected;
+        Coffee selectedCoffee;
+
+        public Coffee SelectedCoffee
+        {
+            get => selectedCoffee;
+            set
+            {
+                if(value != null)
+                {
+                    Application.Current.MainPage.DisplayAlert("Café Selecionado", value.Name, "OK");
+                    previouslySelected = value;
+                    value = null;
+                }
+
+                selectedCoffee = value;
+                OnPropertyChanged();
+            }
+        }
+
+        async Task Favorite(Coffee coffee)
+        {
+            if (coffee == null)
+                return;
+            await Application.Current.MainPage.DisplayAlert("Favorito", coffee.Name, "OK");
+        }
 
         async Task Refresh()
         {
             IsBusy = true;
             await Task.Delay(2000);
+            Coffee.Clear();
+            LoadMore();
             IsBusy = false;
+        }
+
+        void LoadMore()
+        {
+            if (Coffee.Count >= 20)
+                return;
+
+            var image = "https://www.oswaldocruz.com/site/images/artigos/pesquisa_cafe_coracao.jpg";
+
+            Coffee.Add(new Coffee { Roaster = "Robusta", Name = "Conilon", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Robusta", Name = "Bourbon", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Catuaí", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Novo Mundo", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Caturra", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Acaiá", Image = image });
+
+            CoffeeGroups.Clear();
+
+            var tiposCafe = Coffee.GroupBy(c => c.Roaster).Select(g => g.First().Roaster).ToList();
+            foreach (var tipo in tiposCafe)
+            {
+                CoffeeGroups.Add(new Grouping<string, Coffee>(tipo, Coffee.Where(c => c.Roaster == tipo)));
+            }
+        }
+
+        void DelayLoadMore()
+        {
+            if (Coffee.Count <= 10)
+                return;
+
+            LoadMore();
+        }
+
+        void InitializeCoffeList()
+        {
+            var image = "https://www.oswaldocruz.com/site/images/artigos/pesquisa_cafe_coracao.jpg";
+
+            Coffee.Add(new Coffee { Roaster = "Robusta", Name = "Conilon", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Bourbon", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Catuaí", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Novo Mundo", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Caturra", Image = image });
+            Coffee.Add(new Coffee { Roaster = "Arábica", Name = "Acaiá", Image = image });
         }
     }
 }

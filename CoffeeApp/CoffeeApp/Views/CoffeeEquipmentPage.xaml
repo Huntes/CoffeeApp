@@ -5,7 +5,8 @@
              xmlns:model="clr-namespace:CoffeeApp.Models"
              x:Class="CoffeeApp.Views.CoffeeEquipmentPage"
              x:DataType="viewmodels:CoffeeEquipmentViewModel"
-             xmlns:local="viewmodels:CoffeeEquipmentViewModel.CoffeeGroups">
+             xmlns:local="viewmodels:CoffeeEquipmentViewModel.CoffeeGroups"
+             x:Name="CoffeePage">
     
     <ContentPage.BindingContext>
         <viewmodels:CoffeeEquipmentViewModel/>
@@ -24,8 +25,7 @@
             </ListView.ItemTemplate>
         </ListView>-->
 
-        <ListView ItemSelected="ListView_ItemSelected"
-                  ItemTapped="ListView_ItemTapped"
+        <ListView SelectedItem="{Binding SelectedCoffee, Mode=TwoWay}"
                   CachingStrategy="RecycleElement"
                   ItemsSource="{Binding CoffeeGroups}"
                   BackgroundColor="Transparent"
@@ -36,14 +36,14 @@
                   IsPullToRefreshEnabled="true"
                   GroupDisplayBinding="{Binding Key}"
                   IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                  RefreshCommand="{Binding RefreshAsync}"
+                  RefreshCommand="{Binding RefreshCommandAsync}"
                   RefreshControlColor="{StaticResource Primary}">
 
             <ListView.GroupHeaderTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="{x:Null}">
                     <ViewCell>
                         <StackLayout VerticalOptions="FillAndExpand" Padding="10" BackgroundColor="Transparent">
-                            <Label Text="{Binding .}"
+                            <Label Text="{Binding Key}"
                                    TextColor="{StaticResource TextColorMedium}"/>
                         </StackLayout>
                     </ViewCell>
@@ -54,13 +54,13 @@
                 <DataTemplate x:DataType="model:Coffee">
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="Favorite" Clicked="MenuItem_Clicked"></MenuItem>
+                            <MenuItem Text="Favorite" 
+                                      Command="{Binding Source={x:Reference CoffeePage}, Path=BindingContext.FavoriteCommandAsync}"
+                                      CommandParameter="{Binding .}"/>
                             <MenuItem Text="Delete" IsDestructive="True"></MenuItem>
                         </ViewCell.ContextActions>
                         <Grid Padding="10">
-                            <Frame CornerRadius="20"
-                                   HasShadow="true">
-                                
+                            <Frame CornerRadius="20" HasShadow="true">
                                 <StackLayout Orientation="Horizontal">
                                     <Image Source="{Binding Image}"
                                            WidthRequest="100"/>
@@ -83,7 +83,7 @@
             </ListView.ItemTemplate>
             <ListView.Header>
                 <StackLayout Orientation="Horizontal">
-                    <Label Text="Coffee of the World"
+                    <Label Text="Café do Mundo"
                            TextColor="Gray"
                            BackgroundColor="AliceBlue"
                            HorizontalOptions="Center"/>
@@ -91,7 +91,7 @@
             </ListView.Header>
             <ListView.Footer>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <Button Text="Load More"/>
+                    <Button Text="Carregar Mais" Command="{Binding LoadMoreCommandAsync}"/>
                 </StackLayout>
             </ListView.Footer>
         </ListView>
